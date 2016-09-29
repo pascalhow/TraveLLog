@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TraveLLog</string>
+
+    <string name="action_camera">Camera</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="my_trips_fragment_title">My Trips</string>
+
+    <string name="timeline_fragment_title">Timeline</string>
+
+    <string name="my_diary_title">My Diary</string>
+
+    <string name="import_fragment_title">Timeline</string>
+
+</resources>
