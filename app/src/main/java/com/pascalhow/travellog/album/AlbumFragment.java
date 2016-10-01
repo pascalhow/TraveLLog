@@ -1,4 +1,4 @@
-package com.pascalhow.travellog;
+package com.pascalhow.travellog.album;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -6,12 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.pascalhow.travellog.R;
+
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class AlbumFragment extends Fragment {
 
-    public MainActivityFragment() {
+    public AlbumFragment() {
     }
 
     @Override
