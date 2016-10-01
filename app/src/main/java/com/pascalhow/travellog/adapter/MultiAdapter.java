@@ -2,6 +2,8 @@ package com.pascalhow.travellog.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,14 +17,13 @@ import com.pascalhow.travellog.classes.TravellogListItem;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 /**
  * Created by pascal on 01/10/2016.
  */
 
 public class MultiAdapter extends RecyclerView.Adapter<MultiAdapter.ViewHolder> {
-
-    private final String JPG_exifTag_imageDescription = "UserComment";
-    private final String tag_selectedImage = "SelectedImage";
 
     private ArrayList<TravellogListItem> itemList;
     private Context context;
@@ -38,21 +39,29 @@ public class MultiAdapter extends RecyclerView.Adapter<MultiAdapter.ViewHolder> 
         public ViewHolder(final View itemView, int ViewType) {
             super(itemView);
             this.itemType = ViewType;
-//            cardView = (CardView) itemView.findViewById(R.id.gallery_adapter_item_titleallery_cardView);
-//            title = (TextView) itemView.findViewById(R.id.gallery_adapter_item_title);
-//            image = (ImageView) itemView.findViewById(R.id.gallery_adapter_item_image);
-//            imageDescription = (TextView) itemView.findViewById(R.id.gallery_adapter_item_image_description);
         }
     }
 
-    public MultiAdapter(Context context) {
-        this.itemList = new ArrayList<>();
+    public MultiAdapter(Context context, ArrayList<TravellogListItem> itemList) {
+        this.itemList = itemList;
         this.context = context;
     }
 
     public void setItemList(ArrayList<TravellogListItem> itemList) {
         this.itemList = itemList;
         notifyDataSetChanged();
+    }
+
+    public void updateItem(final int index, final TravellogListItem item) {
+        Handler mainThread = new Handler(Looper.getMainLooper());
+        mainThread.post(() -> {
+            try {
+                itemList.set(index, item);
+                notifyItemChanged(index);
+            } catch (IllegalStateException e) {
+                Timber.e(e.toString());
+            }
+        });
     }
 
     @Override
