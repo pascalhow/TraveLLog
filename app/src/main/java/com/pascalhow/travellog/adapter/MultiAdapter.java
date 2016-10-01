@@ -52,6 +52,11 @@ public class MultiAdapter extends RecyclerView.Adapter<MultiAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    /**
+     * Update list items on the main thread
+     * @param index List item index
+     * @param item Item type to be updated
+     */
     public void updateItem(final int index, final TravellogListItem item) {
         Handler mainThread = new Handler(Looper.getMainLooper());
         mainThread.post(() -> {
@@ -80,5 +85,11 @@ public class MultiAdapter extends RecyclerView.Adapter<MultiAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        TravellogListItem item = itemList.get(position);
+        return item.getType();
     }
 }

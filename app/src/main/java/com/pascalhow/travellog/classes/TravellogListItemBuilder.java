@@ -9,6 +9,7 @@ public class TravellogListItemBuilder {
     private String title = "";
     private String description = "";
     private String imagePath = "";
+    private int type = -1;
 
     public TravellogListItemBuilder setTitle(String title) {
         this.title = title;
@@ -25,7 +26,16 @@ public class TravellogListItemBuilder {
         return this;
     }
 
+    public TravellogListItemBuilder setType(int type) {
+        this.type = type;
+        return this;
+    }
+
+    /**
+     * Build the Travellog List Item object
+     * @return TravellogListItem object
+     */
     public TravellogListItem build() {
-        return new TravellogListItem(this.title, this.description, this.imagePath);
+        return new TravellogListItem(this.title, this.description, this.imagePath, this.type);
     }
 }
