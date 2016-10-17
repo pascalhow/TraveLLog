@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.pascalhow.travellog.map.TravelMapFragment;
+
 public class HomeActivity extends AppCompatActivity {
 
     @Override
@@ -18,14 +20,22 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addItinerary);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
             }
         });
+
+        TravelMapFragment mapFragment = new TravelMapFragment();
+        getSupportFragmentManager()
+                .beginTransaction().replace(R.id.content_main, mapFragment)
+                .commitAllowingStateLoss();
+
+
     }
 
     @Override

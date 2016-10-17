@@ -3,11 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.pascalhow.travellog.HomeActivity">
 
-    <item
-        android:id="@+id/action_camera"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_settings"
