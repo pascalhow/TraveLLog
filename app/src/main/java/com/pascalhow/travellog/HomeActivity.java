@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addItinerary);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,13 +34,11 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         getSupportFragmentManager().addOnBackStackChangedListener(
-                new FragmentManager.OnBackStackChangedListener() {
-                    public void onBackStackChanged() {
-                        // Update your UI here.
-                        Fragment f = getSupportFragmentManager().findFragmentById(R.id.content_main);
-                        if (f != null){
-                            updateTitleAndDrawer (f);
-                        }
+                () -> {
+                    // Update your UI here.
+                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_content);
+                    if (f != null){
+                        updateTitleAndDrawer (f);
                     }
                 });
 
@@ -62,10 +60,10 @@ public class HomeActivity extends AppCompatActivity {
 
         switch (tag) {
 
-//              MyTrips fragment is the first fragment to be displayed so we don't addToBackStack()
+//              Travel map fragment is the first fragment to be displayed so we don't addToBackStack()
             case FRAGMENT_TRAVEL_MAP:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.content_main, fragment, tag)
+                        .replace(R.id.main_content, fragment, tag)
                         .commit();
                 break;
             default:

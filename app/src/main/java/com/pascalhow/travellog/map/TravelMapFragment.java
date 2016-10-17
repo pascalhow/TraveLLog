@@ -1,8 +1,11 @@
 package com.pascalhow.travellog.map;
 
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -14,8 +17,12 @@ import android.widget.FrameLayout;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.LatLngBounds.Builder;
@@ -31,9 +38,10 @@ import timber.log.Timber;
  * Created by pascal on 01/10/2016.
  */
 
-public class TravelMapFragment extends SupportMapFragment {
+public class TravelMapFragment extends Fragment{
 
     protected GoogleMap map;
+    MapView mapView;
 
     private static final float MAP_MARKER_ZOOM_LEVEL = 15.5f;
     private boolean mapIsReady, mapIsRendered;
@@ -41,47 +49,135 @@ public class TravelMapFragment extends SupportMapFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.fragment_trip_map,
-                container, false);
+        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
-        View mapView = super.onCreateView(inflater, container, savedInstanceState);
+        mapView = (MapView) rootView.findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar();
+        mapView.onResume(); // needed to get the map to display immediately
 
-        if(map == null) {
-            map = getMap();
-        } else {
-            //  Get current location and display a blue dot
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mapView.getMapAsync(mMap -> {
+            map = mMap;
+
+            // For dropping a marker at a point on the Map
+            LatLng sydney = new LatLng(-34, 151);
+            map.addMarker(new MarkerOptions().position(sydney).title("Sydney").snippet("Marker Description"));
+
+            // For zooming automatically to the location of the marker
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                return;
+            // For showing a move to my location button
             map.setMyLocationEnabled(true);
-        }
 
-        final View viewfinalMapView = mapView;
-        if (viewfinalMapView != null) {
-            viewfinalMapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @SuppressWarnings("deprecation")
-                @SuppressLint("NewApi")
-                @Override
-                public void onGlobalLayout() {
-                    mapIsReady = true;
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                        viewfinalMapView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    } else {
-                        viewfinalMapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-                    renderMap();
+            // For dropping a marker at a point on the Map
+//            LatLng sydney = new LatLng(-34, 151);
+//            map.addMarker(new MarkerOptions().position(sydney).title("Sydney").snippet("Marker Description"));
 
-                }
-            });
-        }
+            // For zooming automatically to the location of the marker
+//            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+//            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        });
 
-        layout.addView(mapView, 0);
-        return layout;
+        return rootView;
+
+
+//        View v = inflater.inflate(R.layout.fragment_map, container, false);
+//
+//        // Gets the MapView from the XML layout and creates it
+//        mapView = (MapView) v.findViewById(R.id.map_view);
+//        mapView.onCreate(savedInstanceState);
+//
+//        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+//            return v;
+//
+//        // Gets to GoogleMap from the MapView and does initialization stuff
+//        if (map == null) {
+//            map = mapView.getMap();
+//            map.getUiSettings().setMyLocationButtonEnabled(false);
+//            if (map != null) {
+//                map.setMyLocationEnabled(true);
+//            }
+//        }
+//
+//        // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
+//        try {
+//            MapsInitializer.initialize(this.getActivity());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return v;
+
+//        FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.fragment_trip_map,
+//                container, false);
+//
+//        View mapView = super.onCreateView(inflater, container, savedInstanceState);
+//
+//        ((AppCompatActivity) getActivity()).getSupportActionBar();
+//
+//        if(map == null) {
+//            map = getMap();
+//        } else {
+//            //  Get current location and display a blue dot
+//            map.setMyLocationEnabled(true);
+//        }
+//
+//        final View viewfinalMapView = mapView;
+//        if (viewfinalMapView != null) {
+//            viewfinalMapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                @SuppressWarnings("deprecation")
+//                @SuppressLint("NewApi")
+//                @Override
+//                public void onGlobalLayout() {
+//                    mapIsReady = true;
+//                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+//                        viewfinalMapView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+//                    } else {
+//                        viewfinalMapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                    }
+//                    renderMap();
+//
+//                }
+//            });
+//        }
+//
+//        layout.addView(mapView, 0);
+//        return layout;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        mapView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     private void renderMap() {
