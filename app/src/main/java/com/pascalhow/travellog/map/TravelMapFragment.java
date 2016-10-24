@@ -65,13 +65,8 @@ public class TravelMapFragment extends Fragment{
         mapView.getMapAsync(mMap -> {
             map = mMap;
 
-            // For dropping a marker at a point on the Map
-            LatLng sydney = new LatLng(-34, 151);
-            map.addMarker(new MarkerOptions().position(sydney).title("Sydney").snippet("Marker Description"));
-
-            // For zooming automatically to the location of the marker
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            MapStartLocation londonStartLocation = new MapStartLocation(51.508620, -0.126172);
+            animateToLatLng(londonStartLocation);
 
             if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -79,81 +74,11 @@ public class TravelMapFragment extends Fragment{
             // For showing a move to my location button
             map.setMyLocationEnabled(true);
 
-            // For dropping a marker at a point on the Map
-//            LatLng sydney = new LatLng(-34, 151);
-//            map.addMarker(new MarkerOptions().position(sydney).title("Sydney").snippet("Marker Description"));
-
-            // For zooming automatically to the location of the marker
-//            CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-//            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            //  TODO: Restore that once we have set app permissions
+//            animateToLatLng(londonStartLocation);
         });
 
         return rootView;
-
-
-//        View v = inflater.inflate(R.layout.fragment_map, container, false);
-//
-//        // Gets the MapView from the XML layout and creates it
-//        mapView = (MapView) v.findViewById(R.id.map_view);
-//        mapView.onCreate(savedInstanceState);
-//
-//        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-//            return v;
-//
-//        // Gets to GoogleMap from the MapView and does initialization stuff
-//        if (map == null) {
-//            map = mapView.getMap();
-//            map.getUiSettings().setMyLocationButtonEnabled(false);
-//            if (map != null) {
-//                map.setMyLocationEnabled(true);
-//            }
-//        }
-//
-//        // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
-//        try {
-//            MapsInitializer.initialize(this.getActivity());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return v;
-
-//        FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.fragment_trip_map,
-//                container, false);
-//
-//        View mapView = super.onCreateView(inflater, container, savedInstanceState);
-//
-//        ((AppCompatActivity) getActivity()).getSupportActionBar();
-//
-//        if(map == null) {
-//            map = getMap();
-//        } else {
-//            //  Get current location and display a blue dot
-//            map.setMyLocationEnabled(true);
-//        }
-//
-//        final View viewfinalMapView = mapView;
-//        if (viewfinalMapView != null) {
-//            viewfinalMapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//                @SuppressWarnings("deprecation")
-//                @SuppressLint("NewApi")
-//                @Override
-//                public void onGlobalLayout() {
-//                    mapIsReady = true;
-//                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-//                        viewfinalMapView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-//                    } else {
-//                        viewfinalMapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                    }
-//                    renderMap();
-//
-//                }
-//            });
-//        }
-//
-//        layout.addView(mapView, 0);
-//        return layout;
     }
 
     @Override
@@ -223,19 +148,14 @@ public class TravelMapFragment extends Fragment{
         }
     }
 
-    private void animateToLatLng(LatLng latLng) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, MAP_MARKER_ZOOM_LEVEL);
-        map.animateCamera(cameraUpdate);
-    }
+    private void animateToLatLng(MapStartLocation location) {
+        // For dropping a marker at a point on the Map
+        LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+        map.addMarker(new MarkerOptions().position(position).title("London").snippet("Marker Description"));
 
-    private void animateToLatLngBounds(LatLngBounds latLngBounds) {
-
-        int mapBoundaryPx = Math.round(getResources().getDimension(R.dimen.map_boundary));
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, mapBoundaryPx);
-        try {
-            map.animateCamera(cameraUpdate);
-        } catch (IllegalStateException ignored) {
-        }
+        // For zooming automatically to the location of the marker
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(position).zoom(12).build();
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     private void updateMapEventMarkers() {
