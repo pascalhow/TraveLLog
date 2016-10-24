@@ -9,4 +9,6 @@
     <dimen name="my_trips_cover_photo_height">200dp</dimen>
     <dimen name="my_trips_text_margin">8dp</dimen>
     <dimen name="my_trips_title_text_size">20dp</dimen>
+
+    <dimen name="map_boundary">70px</dimen>
 </resources>

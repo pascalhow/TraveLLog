@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion '24.0.2'
+
     defaultConfig {
         applicationId "com.pascalhow.travellog"
         minSdkVersion 15
@@ -31,7 +32,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     ext.jodaTimeVersion = '2.9.0'
     ext.playServicesVersion = '8.3.0'
     ext.appCompatVersion = '24.2.1'
@@ -43,9 +43,9 @@ dependencies {
 
     //  Testing
     ext.jUnitVersion = '4.12'
-
     compile "com.android.support:appcompat-v7:$appCompatVersion"
     compile "com.android.support:design:$appCompatVersion"
+
     testCompile "junit:junit:$jUnitVersion"
 
     //  App frameworks
@@ -57,7 +57,6 @@ dependencies {
 
     //  Logging
     compile "com.jakewharton.timber:timber:$timberVersion"
-
     //  Google
     compile "com.google.android.gms:play-services-location:$playServicesVersion"
     compile "com.google.android.gms:play-services-maps:$playServicesVersion"
@@ -66,7 +65,6 @@ dependencies {
 
     //  Multithreading
     compile "eu.the4thfloor.volley:com.android.volley:$volleyVersion"
-
     //  Material Dialog
     compile "com.afollestad.material-dialogs:core:$materialDesignDialogVersion"
 }
