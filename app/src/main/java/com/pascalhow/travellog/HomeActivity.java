@@ -33,15 +33,19 @@ public class HomeActivity extends AppCompatActivity {
         getSupportFragmentManager().addOnBackStackChangedListener(
                 () -> {
                     // Update your UI here.
-                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_content);
-                    if (f != null) {
-                        updateFragmentTitle(f);
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
+                    if (fragment != null) {
+                        updateFragmentTitle(fragment);
                     }
                 });
 
         loadFragment(new TravelMapFragment(), FRAGMENT_TRAVEL_MAP);
     }
 
+    /**
+     * Handle screen display when navigating between fragment
+     * @param fragment The current fragment
+     */
     private void updateFragmentTitle(Fragment fragment) {
         String fragClassName = fragment.getClass().getName();
 
@@ -53,6 +57,11 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Replaces or adds a new fragment on top of the current fragment
+     * @param fragment The new fragment
+     * @param tag A tag relating to the new fragment
+     */
     public void loadFragment(android.support.v4.app.Fragment fragment, String tag) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -68,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
 
             case FRAGMENT_NEW_TRIP:
                 fragmentManager.beginTransaction()
-                        .add(R.id.main_content, fragment, FRAGMENT_NEW_TRIP)
+                        .add(R.id.main_content, fragment, tag)
                         .addToBackStack(FRAGMENT_NEW_TRIP)
                         .commitAllowingStateLoss();
             default:
