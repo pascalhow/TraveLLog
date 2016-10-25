@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorLightGray">#F1F1F1</color>
-    <color name="colorGray">#C1C1C1</color>
+    <color name="color_primary">#00BCD4</color>
+    <color name="color_primary_dark">#0097A7</color>
+    <color name="color_accent">#00BCD4</color>
+    <color name="color_white">#FFFFFF</color>
+
+    <color name="app_background">@color/color_white</color>
+    <color name="color_divider">@color/color_accent</color>
 </resources>

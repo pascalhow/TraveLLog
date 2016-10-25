@@ -2,55 +2,54 @@ package com.pascalhow.travellog;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pascalhow.travellog.map.TravelMapFragment;
+import com.pascalhow.travellog.newtrip.NewTripFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
     private static final String FRAGMENT_TRAVEL_MAP = "travel_map";
+    private static final String FRAGMENT_NEW_TRIP = "new_trip";
+
+    protected FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addItinerary);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.addNewTrip);
+        fab.setOnClickListener(view -> loadFragment(new NewTripFragment(), FRAGMENT_NEW_TRIP));
 
         getSupportFragmentManager().addOnBackStackChangedListener(
                 () -> {
                     // Update your UI here.
                     Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_content);
-                    if (f != null){
-                        updateTitleAndDrawer (f);
+                    if (f != null) {
+                        updateFragmentTitle(f);
                     }
                 });
-
 
         loadFragment(new TravelMapFragment(), FRAGMENT_TRAVEL_MAP);
     }
 
-    private void updateTitleAndDrawer (Fragment fragment){
+    private void updateFragmentTitle(Fragment fragment) {
         String fragClassName = fragment.getClass().getName();
 
-        if (fragClassName.equals(TravelMapFragment.class.getName())){
-            setTitle (getResources().getString(R.string.my_trips_fragment_title));
+        if (fragClassName.equals(TravelMapFragment.class.getName())) {
+            setTitle(getResources().getString(R.string.my_trips_fragment_title));
+            showFloatingActionButton();
+        } else if (fragClassName.equals(NewTripFragment.class.getName())) {
+            setTitle(getResources().getString(R.string.new_trip_title));
         }
     }
 
@@ -60,12 +59,18 @@ public class HomeActivity extends AppCompatActivity {
 
         switch (tag) {
 
-//              Travel map fragment is the first fragment to be displayed so we don't addToBackStack()
+            //  Travel map fragment is the first fragment to be displayed so we don't addToBackStack()
             case FRAGMENT_TRAVEL_MAP:
                 fragmentManager.beginTransaction()
                         .replace(R.id.main_content, fragment, tag)
                         .commit();
                 break;
+
+            case FRAGMENT_NEW_TRIP:
+                fragmentManager.beginTransaction()
+                        .add(R.id.main_content, fragment, FRAGMENT_NEW_TRIP)
+                        .addToBackStack(FRAGMENT_NEW_TRIP)
+                        .commitAllowingStateLoss();
             default:
                 break;
         }
@@ -92,4 +97,16 @@ public class HomeActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void showFloatingActionButton() {
+        fab.show();
+    }
+
+    ;
+
+    public void hideFloatingActionButton() {
+        fab.hide();
+    }
+
+    ;
 }
