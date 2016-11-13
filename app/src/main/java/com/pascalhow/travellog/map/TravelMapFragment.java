@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +22,7 @@ import com.google.android.gms.maps.model.LatLngBounds.Builder;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pascalhow.travellog.HomeActivity;
 import com.pascalhow.travellog.R;
+import com.pascalhow.travellog.newtrip.NewTripFragment;
 
 import java.util.List;
 
@@ -48,6 +52,8 @@ public class TravelMapFragment extends Fragment {
         homeActivity = (HomeActivity) getActivity();
         homeActivity.setTitle(R.string.my_trips_fragment_title);
         homeActivity.showFloatingActionButton();
+
+        setHasOptionsMenu(true);
 
         mapView = (MapView) rootView.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
@@ -91,6 +97,33 @@ public class TravelMapFragment extends Fragment {
         super.onResume();
 
         homeActivity.showFloatingActionButton();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_save);
+        item.setVisible(false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_save:
+                //  Save new trip
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

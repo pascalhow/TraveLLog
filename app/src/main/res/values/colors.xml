@@ -6,5 +6,5 @@
     <color name="color_white">#FFFFFF</color>
 
     <color name="app_background">@color/color_white</color>
-    <color name="color_divider">@color/color_accent</color>
+    <color name="color_divider">#E0F7FA</color>
 </resources>

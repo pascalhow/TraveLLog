@@ -3,10 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.pascalhow.travellog.HomeActivity">
 
+    <!--<item-->
+        <!--android:id="@+id/action_settings"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="@string/action_settings"-->
+        <!--app:showAsAction="never" />-->
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="101"
+        android:id="@+id/action_save"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:orderInCategory="101"
+        android:icon="@drawable/ico_check"
+        android:visible="false"
+        app:showAsAction="always" />
 </menu>

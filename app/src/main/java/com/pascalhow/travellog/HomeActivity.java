@@ -28,16 +28,8 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.addNewTrip);
-        fab.setOnClickListener(view -> loadFragment(new NewTripFragment(), FRAGMENT_NEW_TRIP));
 
-        getSupportFragmentManager().addOnBackStackChangedListener(
-                () -> {
-                    // Update your UI here.
-                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
-                    if (fragment != null) {
-                        updateFragmentTitle(fragment);
-                    }
-                });
+        setOnBackStackListener();
 
         loadFragment(new TravelMapFragment(), FRAGMENT_TRAVEL_MAP);
     }
@@ -73,6 +65,8 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.main_content, fragment, tag)
                         .commit();
+
+                fab.setOnClickListener(view -> loadFragment(new NewTripFragment(), FRAGMENT_NEW_TRIP));
                 break;
 
             case FRAGMENT_NEW_TRIP:
@@ -100,9 +94,9 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -111,11 +105,21 @@ public class HomeActivity extends AppCompatActivity {
         fab.show();
     }
 
-    ;
-
     public void hideFloatingActionButton() {
         fab.hide();
     }
 
-    ;
+    /**
+     * Handles backStackListener when user navigates between fragments
+     */
+    private void setOnBackStackListener() {
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                () -> {
+                    // Update your UI here.
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
+                    if (fragment != null) {
+                        updateFragmentTitle(fragment);
+                    }
+                });
+    }
 }

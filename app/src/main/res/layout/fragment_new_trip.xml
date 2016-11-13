@@ -17,8 +17,10 @@
             android:layout_marginTop="@dimen/new_trip_text_margin_vertical"
             android:background="@android:color/transparent"
             android:hint="@string/new_trip_new_trip_title"
+            android:inputType="text"
             android:maxLines="1"
             android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/tab_indicator_text"
             android:textSize="@dimen/new_trip_title_text_size" />
 
         <View style="@style/Divider" />
@@ -40,12 +42,14 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="1"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
                 android:hint="@string/new_trip_new_city"
+                android:inputType="text"
+                android:lines="1"
                 android:maxLines="1"
                 android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@android:color/tab_indicator_text"
                 android:textSize="@dimen/new_trip_description_text_size" />
         </LinearLayout>
 
@@ -71,14 +75,17 @@
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
                 android:hint="@string/new_trip_new_description"
+                android:inputType="textMultiLine"
                 android:maxLines="5"
                 android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@android:color/tab_indicator_text"
                 android:textSize="@dimen/new_trip_description_text_size" />
         </LinearLayout>
 
         <View style="@style/Divider" />
 
         <LinearLayout
+            android:id="@+id/new_trip_cover_photo_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/new_trip_text_margin_vertical"
@@ -87,12 +94,13 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/new_trip_text_margin_horizontal"
                 android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/new_trip_text_margin_horizontal"
                 android:src="@drawable/ico_photo"
                 android:tint="@color/color_primary" />
 
             <TextView
+                android:id="@+id/new_trip_add_cover_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

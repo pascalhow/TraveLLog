@@ -3,6 +3,7 @@
 
     <string name="action_camera">Camera</string>
     <string name="action_settings">Settings</string>
+    <string name="action_save">Save</string>
 
     <string name="my_trips_fragment_title">My Trips</string>
     <string name="my_trips_album_title">Album Title</string>
@@ -16,6 +17,6 @@
     <string name="new_trip_new_trip_title">Title</string>
     <string name="new_trip_new_city">City</string>
     <string name="new_trip_new_description">Description</string>
-    <string name="new_trip_new_cover_photo">Cover Photo</string>
+    <string name="new_trip_new_cover_photo"> Add Cover Photo</string>
     <string name="new_trip_save_trip">Save</string>
 </resources>

@@ -12,7 +12,7 @@
     <!-- Text Size -->
     <dimen name="text_size_large">40dp</dimen>
     <dimen name="text_size_medium">30dp</dimen>
-    <dimen name="text_size_small">15dp</dimen>
+    <dimen name="text_size_small">16dp</dimen>
 
     <!--Text Margin -->
     <dimen name="text_margin_small">8dp</dimen>
@@ -39,5 +39,4 @@
     <dimen name="my_trips_text_margin">@dimen/text_margin_vertical_small</dimen>
     <dimen name="my_trips_title_text_size">@dimen/text_size_large</dimen>
 
-    <dimen name="map_boundary">70px</dimen>
 </resources>
