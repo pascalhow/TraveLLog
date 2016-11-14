@@ -26,16 +26,20 @@
     <dimen name="image_horizontal_margin">12dp</dimen>
     <dimen name="image_vertical_margin">12dp</dimen>
 
+    <!-- Image Dimensions -->
+    <dimen name="cover_photo_height">200dp</dimen>
+
     <!-- New Trip -->
     <dimen name="new_trip_title_text_size">@dimen/text_size_large</dimen>
     <dimen name="new_trip_description_text_size">@dimen/text_size_small</dimen>
     <dimen name="new_trip_text_margin_vertical">@dimen/text_margin_vertical_medium</dimen>
     <dimen name="new_trip_text_margin_horizontal">@dimen/text_margin_horizontal_small</dimen>
+    <dimen name="new_trip_cover_photo_height">@dimen/cover_photo_height</dimen>
 
     <!-- My Trips -->
     <dimen name="my_trips_horizontal_margin">@dimen/image_horizontal_margin</dimen>
     <dimen name="my_trips_vertical_margin">@dimen/image_vertical_margin</dimen>
-    <dimen name="my_trips_cover_photo_height">200dp</dimen>
+    <dimen name="my_trips_cover_photo_height">@dimen/cover_photo_height</dimen>
     <dimen name="my_trips_text_margin">@dimen/text_margin_vertical_small</dimen>
     <dimen name="my_trips_title_text_size">@dimen/text_size_large</dimen>
 

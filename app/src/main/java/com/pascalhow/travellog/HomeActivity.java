@@ -1,5 +1,6 @@
 package com.pascalhow.travellog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -121,5 +122,11 @@ public class HomeActivity extends AppCompatActivity {
                         updateFragmentTitle(fragment);
                     }
                 });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

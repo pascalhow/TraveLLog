@@ -19,4 +19,6 @@
     <string name="new_trip_new_description">Description</string>
     <string name="new_trip_new_cover_photo"> Add Cover Photo</string>
     <string name="new_trip_save_trip">Save</string>
+    <string name="new_trip_select_cover_photo_title">Select Picture</string>
+    <string name="new_trip_msg_failed_to_get_picture">Failed to get image</string>
 </resources>
