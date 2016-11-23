@@ -81,44 +81,35 @@
                     android:background="@android:color/transparent"
                     android:hint="@string/new_trip_new_description"
                     android:inputType="textMultiLine"
-                    android:maxLines="5"
                     android:textAppearance="?android:textAppearanceMedium"
                     android:textColor="@android:color/tab_indicator_text"
                     android:textSize="@dimen/new_trip_description_text_size" />
             </LinearLayout>
 
             <View style="@style/Divider" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/new_trip_text_margin_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/new_trip_text_margin_horizontal"
-                    android:src="@drawable/ico_photo"
-                    android:tint="@color/color_primary" />
-
-                <TextView
-                    android:id="@+id/new_trip_add_cover_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/new_trip_new_cover_photo"
-                    android:textAppearance="?android:textAppearanceMedium"
-                    android:textSize="@dimen/new_trip_description_text_size" />
-            </LinearLayout>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/new_trip_cover_photo"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:background="@color/color_primary_dark"
-            android:layout_height="@dimen/new_trip_cover_photo_height"
-            android:visibility="visible" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/new_trip_cover_photo"
+                android:layout_width="match_parent"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:background="@color/new_trip_placeholder_cover_photo"
+                android:layout_height="@dimen/new_trip_cover_photo_height"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/new_trip_new_photo_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ico_new_photo"
+                android:backgroundTint="@android:color/darker_gray"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
     </LinearLayout>
 </ScrollView>

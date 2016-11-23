@@ -45,6 +45,8 @@ public class NewTripFragment extends Fragment {
     @BindView(R2.id.new_trip_cover_photo)
     ImageView coverPhoto;
 
+    @BindView(R2.id.new_trip_new_photo_icon)
+    ImageView newPhotoIcon;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,7 +91,7 @@ public class NewTripFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R2.id.new_trip_add_cover_photo)
+    @OnClick(R2.id.new_trip_cover_photo)
     public void addCoverPhoto() {
         // in onCreate or any event where your want the user to
         // select a file
@@ -121,6 +123,8 @@ public class NewTripFragment extends Fragment {
 
                 Uri selectedImageUri = data.getData();
                 ImageHelper.setImage(getContext(), coverPhoto, selectedImageUri);
+                newPhotoIcon.setVisibility(View.GONE);
+
             } else if (requestCode == SELECT_MULTIPLE_PICTURE) {
                 //And in the Result handling check for that parameter:
                 if (Intent.ACTION_SEND_MULTIPLE.equals(data.getAction())
