@@ -93,8 +93,6 @@ public class NewTripFragment extends Fragment {
 
     @OnClick(R2.id.new_trip_cover_photo)
     public void addCoverPhoto() {
-        // in onCreate or any event where your want the user to
-        // select a file
         Intent intent = new Intent();
         intent.setType(IMAGE_TYPE);
         intent.setAction(Intent.ACTION_GET_CONTENT);

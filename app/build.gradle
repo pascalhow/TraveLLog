@@ -36,13 +36,14 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     ext.jodaTimeVersion = '2.9.0'
-    ext.playServicesVersion = '8.3.0'
+    ext.playServicesVersion = '9.8.0'
     ext.appCompatVersion = '24.2.1'
     ext.picassoVersion = '2.5.2'
     ext.butterknifeVersion = '8.4.0'
     ext.timberVersion = '4.3.1'
     ext.materialDesignDialogVersion = '0.9.0.2'
     ext.volleyVersion = '2015.05.28'
+
 
     //  Testing
     ext.jUnitVersion = '4.12'

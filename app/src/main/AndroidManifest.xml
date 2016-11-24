@@ -33,9 +33,13 @@
         android:theme="@style/AppTheme">
 
         <uses-library android:name="com.google.android.maps"/>
+
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBBNTc9arBFw42k3dv1Kv3GkkqC8DaH6sw"/>
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA-YyZRxSygty6MJR_jZXBnBRVlSXfgWjc"/>
 
         <activity
             android:name=".HomeActivity"
