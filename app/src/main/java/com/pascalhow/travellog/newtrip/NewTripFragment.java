@@ -12,12 +12,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.pascalhow.travellog.HomeActivity;
 import com.pascalhow.travellog.R;
 import com.pascalhow.travellog.R2;
+import com.pascalhow.travellog.places.PlacesAutoCompleteAdapter;
 import com.pascalhow.travellog.utils.ImageHelper;
 
 import java.util.ArrayList;
@@ -27,20 +41,32 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by pascal on 24/10/2016.
  * Reference: https://github.com/hanscappelle/SO-2169649
  */
 
-public class NewTripFragment extends Fragment {
+public class NewTripFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
 
     private HomeActivity homeActivity;
 
     private static final int SELECT_SINGLE_PICTURE = 101;
     private static final int SELECT_MULTIPLE_PICTURE = 201;
+    private static final int PLACE_PICKER_FLAG = 301;
 
     public static final String IMAGE_TYPE = "image/*";
+
+    protected GoogleApiClient mGoogleApiClient;
+
+    private PlacesAutoCompleteAdapter mPlacesAdapter;
+
+    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
+            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+
+    @BindView(R2.id.new_trip_city_text_view)
+    AutoCompleteTextView mAutocompleteView;
 
     @BindView(R2.id.new_trip_cover_photo)
     ImageView coverPhoto;
@@ -59,6 +85,19 @@ public class NewTripFragment extends Fragment {
         homeActivity.hideFloatingActionButton();
 
         setHasOptionsMenu(true);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(Places.GEO_DATA_API)
+                .build();
+
+        // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
+        // the entire world.
+        mPlacesAdapter = new PlacesAutoCompleteAdapter(getContext(), android.R.layout.simple_list_item_1,
+                mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
+        mAutocompleteView.setAdapter(mPlacesAdapter);
+
+        // Register a listener that receives callbacks when a suggestion has been selected
+        mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
 
         return rootView;
     }
@@ -102,6 +141,32 @@ public class NewTripFragment extends Fragment {
         Toast.makeText(getContext(), "Add cover photo", Toast.LENGTH_SHORT).show();
     }
 
+    private AdapterView.OnItemClickListener mAutocompleteClickListener
+            = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            final PlacesAutoCompleteAdapter.PlaceAutocomplete item = mPlacesAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
+                    .getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+            = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                Log.e("place", "Place query did not complete. Error: " +
+                        places.getStatus().toString());
+                return;
+            }
+            // Selecting the first object buffer.
+            final Place place = places.get(0);
+        }
+    };
+
     @Override
     public void onResume() {
         super.onResume();
@@ -109,10 +174,35 @@ public class NewTripFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
     public void onStop() {
+        mGoogleApiClient.disconnect();
         super.onStop();
     }
 
+    /**
+     * Called when the Activity could not connect to Google Play services and the auto manager
+     * could resolve the error automatically.
+     * In this case the API is not available and notify the user.
+     *
+     * @param connectionResult can be inspected to determine the cause of the failure
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
+                + connectionResult.getErrorCode());
+
+        // TODO(Developer): Check error code and notify the user of error state and resolution.
+        Toast.makeText(getContext(),
+                "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
+                Toast.LENGTH_SHORT).show();
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -123,7 +213,13 @@ public class NewTripFragment extends Fragment {
                 ImageHelper.setImage(getContext(), coverPhoto, selectedImageUri);
                 newPhotoIcon.setVisibility(View.GONE);
 
-            } else if (requestCode == SELECT_MULTIPLE_PICTURE) {
+            }
+            if (requestCode == PLACE_PICKER_FLAG) {
+                Place place = PlacePicker.getPlace(getContext(), data);
+                mAutocompleteView.setText(place.getName() + ", " + place.getAddress());
+            }
+
+            else if (requestCode == SELECT_MULTIPLE_PICTURE) {
                 //And in the Result handling check for that parameter:
                 if (Intent.ACTION_SEND_MULTIPLE.equals(data.getAction())
                         && data.hasExtra(Intent.EXTRA_STREAM)) {
