@@ -21,7 +21,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
@@ -31,6 +30,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.pascalhow.travellog.HomeActivity;
 import com.pascalhow.travellog.R;
 import com.pascalhow.travellog.R2;
+import com.pascalhow.travellog.places.PlaceAutoComplete;
 import com.pascalhow.travellog.places.PlacesAutoCompleteAdapter;
 import com.pascalhow.travellog.utils.ImageHelper;
 
@@ -58,15 +58,14 @@ public class NewTripFragment extends Fragment implements GoogleApiClient.OnConne
 
     public static final String IMAGE_TYPE = "image/*";
 
-    protected GoogleApiClient mGoogleApiClient;
+    protected GoogleApiClient googleApiClient;
 
-    private PlacesAutoCompleteAdapter mPlacesAdapter;
+    private PlacesAutoCompleteAdapter placesAdapter;
 
-    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+    private static final LatLngBounds GOOGLE_PLACES_BOUND = new LatLngBounds(new LatLng(-85, -180), new LatLng(85, 180));
 
-    @BindView(R2.id.new_trip_city_text_view)
-    AutoCompleteTextView mAutocompleteView;
+    @BindView(R2.id.new_trip_autocomplete_text_view)
+    AutoCompleteTextView autoCompleteView;
 
     @BindView(R2.id.new_trip_cover_photo)
     ImageView coverPhoto;
@@ -86,18 +85,21 @@ public class NewTripFragment extends Fragment implements GoogleApiClient.OnConne
 
         setHasOptionsMenu(true);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+        googleApiClient = new GoogleApiClient.Builder(getContext())
                 .addApi(Places.GEO_DATA_API)
                 .build();
 
         // Set up the adapter that will retrieve suggestions from the Places Geo Data API that cover
         // the entire world.
-        mPlacesAdapter = new PlacesAutoCompleteAdapter(getContext(), android.R.layout.simple_list_item_1,
-                mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
-        mAutocompleteView.setAdapter(mPlacesAdapter);
+        placesAdapter = new PlacesAutoCompleteAdapter(getContext(),
+                android.R.layout.simple_list_item_1,
+                googleApiClient, GOOGLE_PLACES_BOUND,
+                null);
+
+        autoCompleteView.setAdapter(placesAdapter);
 
         // Register a listener that receives callbacks when a suggestion has been selected
-        mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
+        autoCompleteView.setOnItemClickListener(autocompleteClickListener);
 
         return rootView;
     }
@@ -141,19 +143,17 @@ public class NewTripFragment extends Fragment implements GoogleApiClient.OnConne
         Toast.makeText(getContext(), "Add cover photo", Toast.LENGTH_SHORT).show();
     }
 
-    private AdapterView.OnItemClickListener mAutocompleteClickListener
-            = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener autocompleteClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final PlacesAutoCompleteAdapter.PlaceAutocomplete item = mPlacesAdapter.getItem(position);
+            final PlaceAutoComplete item = placesAdapter.getItem(position);
             final String placeId = String.valueOf(item.placeId);
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(googleApiClient, placeId);
+            placeResult.setResultCallback(updatePlaceDetailsCallback);
         }
     };
 
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
+    private ResultCallback<PlaceBuffer> updatePlaceDetailsCallback
             = new ResultCallback<PlaceBuffer>() {
         @Override
         public void onResult(PlaceBuffer places) {
@@ -176,12 +176,12 @@ public class NewTripFragment extends Fragment implements GoogleApiClient.OnConne
     @Override
     public void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        googleApiClient.connect();
     }
 
     @Override
     public void onStop() {
-        mGoogleApiClient.disconnect();
+        googleApiClient.disconnect();
         super.onStop();
     }
 
@@ -198,11 +198,15 @@ public class NewTripFragment extends Fragment implements GoogleApiClient.OnConne
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + connectionResult.getErrorCode());
 
+        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorMessage() = "
+                + connectionResult.getErrorMessage());
+
         // TODO(Developer): Check error code and notify the user of error state and resolution.
         Toast.makeText(getContext(),
                 "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
                 Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -216,7 +220,7 @@ public class NewTripFragment extends Fragment implements GoogleApiClient.OnConne
             }
             if (requestCode == PLACE_PICKER_FLAG) {
                 Place place = PlacePicker.getPlace(getContext(), data);
-                mAutocompleteView.setText(place.getName() + ", " + place.getAddress());
+                autoCompleteView.setText(place.getName() + ", " + place.getAddress());
             }
 
             else if (requestCode == SELECT_MULTIPLE_PICTURE) {

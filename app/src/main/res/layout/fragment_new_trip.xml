@@ -45,7 +45,7 @@
                     android:tint="@color/color_primary" />
 
                 <AutoCompleteTextView
-                    android:id="@+id/new_trip_city_text_view"
+                    android:id="@+id/new_trip_autocomplete_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
